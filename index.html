@@ -108,6 +108,34 @@
   #saveSettingsBtn:disabled{opacity:.45;}
   #settingsMsg{font-size:13px; color:var(--green); display:none;}
   .loading{color:var(--dim); font-size:14px; padding:20px 0; text-align:center;}
+  .cardTitle{font-size:16px; font-weight:800; color:var(--green-dark); margin:0 0 10px;}
+  .shopRow{display:flex; gap:8px;}
+  #shopInput{
+    flex:1; min-width:0; font-size:16px; padding:12px; border:1px solid var(--border);
+    border-radius:10px; background:#fff; color:var(--text);
+  }
+  #shopAddBtn{
+    padding:12px 22px; font-size:17px; font-weight:800; border:0; border-radius:10px;
+    background:var(--green); color:#fff; cursor:pointer;
+  }
+  #shopAddBtn:disabled{opacity:.45;}
+  ul.shopList{list-style:none; margin:6px 0 0; padding:0;}
+  ul.shopList li{
+    display:flex; align-items:center; gap:10px; padding:10px 2px;
+    border-bottom:1px solid var(--border);
+  }
+  ul.shopList li:last-child{border-bottom:0;}
+  .sCheck{width:24px; height:24px; flex-shrink:0; accent-color:var(--green); cursor:pointer; margin:0;}
+  .sName{flex:1; min-width:0; word-break:break-word; font-size:16px; cursor:pointer;}
+  li.done .sName{color:var(--dim); text-decoration:line-through;}
+  .sDel{
+    flex-shrink:0; border:0; background:none; color:var(--dim); font-size:22px; line-height:1;
+    padding:4px 8px; cursor:pointer;
+  }
+  #clearDoneBtn{
+    border:0; background:none; color:var(--dim); font-size:13px; text-decoration:underline;
+    text-underline-offset:3px; padding:8px 2px 0; cursor:pointer; display:none;
+  }
 </style>
 </head>
 <body>
@@ -147,6 +175,17 @@
     <input type="text" id="memoInput" placeholder="メモ（任意）" maxlength="100" aria-label="メモ">
     <p id="remainHint"></p>
     <p id="formError"></p>
+  </div>
+
+  <div class="card">
+    <p class="cardTitle">買い物リスト</p>
+    <div class="shopRow">
+      <input type="text" id="shopInput" placeholder="買うものを入力" maxlength="100" aria-label="買うものを入力">
+      <button type="button" id="shopAddBtn" disabled>追加</button>
+    </div>
+    <ul class="shopList" id="shopList"></ul>
+    <p class="emptyNote" id="shopEmptyNote" style="display:none;">買い物リストは空です。</p>
+    <button type="button" id="clearDoneBtn">買ったものをまとめて削除</button>
   </div>
 
   <div class="card">
@@ -194,9 +233,11 @@
   var rootRef = db.ref(ROOM_PATH);
   var settingsRef = rootRef.child("settings");
   var entriesRef = rootRef.child("entries");
+  var shoppingRef = rootRef.child("shopping");
 
   var settings = null;
   var entriesMap = {};
+  var shoppingMap = {};
   var loaded = false;
   var mode = "spent";
 
@@ -343,7 +384,92 @@
 
     updateHint(spent);
     validateForm(spent);
+    renderShop();
   }
+
+  function shopItems(){
+    var list = [];
+    Object.keys(shoppingMap).forEach(function(key){
+      var it = shoppingMap[key];
+      if (it && typeof it.name === "string" && it.name) {
+        list.push({ key: key, name: it.name, done: !!it.done, ts: it.ts || 0 });
+      }
+    });
+    list.sort(function(a, b){
+      if (a.done !== b.done) return a.done ? 1 : -1;
+      return (a.ts - b.ts) || (a.key < b.key ? -1 : 1);
+    });
+    return list;
+  }
+
+  function renderShop(){
+    var list = shopItems();
+    $("shopEmptyNote").style.display = list.length === 0 ? "block" : "none";
+    $("clearDoneBtn").style.display =
+      list.some(function(it){ return it.done; }) ? "block" : "none";
+    var ul = $("shopList");
+    ul.innerHTML = "";
+    list.forEach(function(it){
+      var li = document.createElement("li");
+      if (it.done) li.className = "done";
+      var check = document.createElement("input");
+      check.type = "checkbox";
+      check.className = "sCheck";
+      check.checked = it.done;
+      check.setAttribute("aria-label", it.name + "を買ったことにする");
+      check.addEventListener("change", function(){
+        shoppingRef.child(it.key).child("done").set(check.checked).catch(function(){
+          showError("更新できませんでした。もう一度試してください。");
+        });
+      });
+      li.appendChild(check);
+      var name = document.createElement("span");
+      name.className = "sName";
+      name.textContent = it.name;
+      name.addEventListener("click", function(){
+        shoppingRef.child(it.key).child("done").set(!it.done).catch(function(){
+          showError("更新できませんでした。もう一度試してください。");
+        });
+      });
+      li.appendChild(name);
+      var del = document.createElement("button");
+      del.type = "button";
+      del.className = "sDel";
+      del.textContent = "×";
+      del.setAttribute("aria-label", it.name + "を削除");
+      del.addEventListener("click", function(){
+        shoppingRef.child(it.key).remove().catch(function(){
+          showError("削除できませんでした。もう一度試してください。");
+        });
+      });
+      li.appendChild(del);
+      ul.appendChild(li);
+    });
+  }
+
+  function submitShopItem(){
+    var name = $("shopInput").value.trim().slice(0, 100);
+    if (!name) return;
+    shoppingRef.push({ name: name, done: false, ts: Date.now() }).then(function(){
+      $("shopInput").value = "";
+      $("shopAddBtn").disabled = true;
+      $("shopInput").focus();
+    }).catch(function(){
+      showError("追加できませんでした。もう一度試してください。");
+    });
+  }
+  $("shopInput").addEventListener("input", function(){
+    $("shopAddBtn").disabled = !$("shopInput").value.trim();
+  });
+  $("shopAddBtn").addEventListener("click", submitShopItem);
+  $("shopInput").addEventListener("keydown", function(e){
+    if (e.key === "Enter") { e.preventDefault(); submitShopItem(); }
+  });
+  $("clearDoneBtn").addEventListener("click", function(){
+    shopItems().forEach(function(it){
+      if (it.done) shoppingRef.child(it.key).remove();
+    });
+  });
 
   function updateHint(spent){
     var hint = $("remainHint");
@@ -461,6 +587,7 @@
       };
     }
     entriesMap = data.entries || {};
+    shoppingMap = data.shopping || {};
     loaded = true;
     render();
   }, function(err){
