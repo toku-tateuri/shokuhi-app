@@ -161,6 +161,17 @@
     <div class="barOuter"><div class="barInner" id="barInner" style="width:0%"></div></div>
   </div>
 
+  <div class="card">
+    <p class="cardTitle">買い物リスト</p>
+    <div class="shopRow">
+      <input type="text" id="shopInput" placeholder="買うものを入力" maxlength="100" aria-label="買うものを入力">
+      <button type="button" id="shopAddBtn" disabled>追加</button>
+    </div>
+    <ul class="shopList" id="shopList"></ul>
+    <p class="emptyNote" id="shopEmptyNote" style="display:none;">買い物リストは空です。</p>
+    <button type="button" id="clearDoneBtn">買ったものをまとめて削除</button>
+  </div>
+
   <img class="banner" src="dugong.jpg" alt="クリスマスのリースをかぶったジュゴン">
 
   <div class="card">
@@ -177,16 +188,6 @@
     <p id="formError"></p>
   </div>
 
-  <div class="card">
-    <p class="cardTitle">買い物リスト</p>
-    <div class="shopRow">
-      <input type="text" id="shopInput" placeholder="買うものを入力" maxlength="100" aria-label="買うものを入力">
-      <button type="button" id="shopAddBtn" disabled>追加</button>
-    </div>
-    <ul class="shopList" id="shopList"></ul>
-    <p class="emptyNote" id="shopEmptyNote" style="display:none;">買い物リストは空です。</p>
-    <button type="button" id="clearDoneBtn">買ったものをまとめて削除</button>
-  </div>
 
   <div class="card">
     <ul class="entries" id="entryList"></ul>
