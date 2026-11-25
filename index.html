@@ -53,21 +53,21 @@
   }
   .modeToggle button.active{background:var(--green); color:#fff;}
   .amountRow{display:flex; gap:8px;}
-  #amountInput{
+  #amountInput, #aAmountInput{
     flex:1; min-width:0; font-size:20px; padding:12px; border:1px solid var(--border);
     border-radius:10px; font-variant-numeric:tabular-nums; background:#fff; color:var(--text);
   }
-  #addBtn{
+  #addBtn, #aAddBtn{
     padding:12px 22px; font-size:17px; font-weight:800; border:0; border-radius:10px;
     background:var(--green); color:#fff; cursor:pointer;
   }
-  #addBtn:disabled{opacity:.45;}
-  #memoInput{
+  #addBtn:disabled, #aAddBtn:disabled{opacity:.45;}
+  #memoInput, #aMemoInput{
     width:100%; margin-top:8px; font-size:16px; padding:11px 12px; border:1px solid var(--border);
     border-radius:10px; background:#fff; color:var(--text);
   }
-  #remainHint{font-size:13px; color:var(--dim); margin-top:8px; font-variant-numeric:tabular-nums; display:none;}
-  #formError{font-size:13px; color:var(--danger); margin-top:8px; display:none;}
+  #remainHint, #aRemainHint{font-size:13px; color:var(--dim); margin-top:8px; font-variant-numeric:tabular-nums; display:none;}
+  #formError, #aFormError{font-size:13px; color:var(--danger); margin-top:8px; display:none;}
   ul.entries{list-style:none; margin:0; padding:0;}
   ul.entries li{
     display:flex; align-items:baseline; gap:8px; padding:10px 2px;
@@ -92,8 +92,8 @@
     border:0; background:none; color:var(--dim); font-size:14px; text-decoration:underline;
     text-underline-offset:3px; padding:6px 2px; cursor:pointer;
   }
-  #settingsBox{display:none; margin-top:8px;}
-  #settingsBox.open{display:block;}
+  #settingsBox, #aSettingsBox{display:none; margin-top:8px;}
+  #settingsBox.open, #aSettingsBox.open{display:block;}
   .setRow{display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
   .setRow label{font-size:15px; color:var(--dim); display:flex; align-items:center; gap:8px;}
   .setRow input{
@@ -101,12 +101,12 @@
     font-variant-numeric:tabular-nums;
   }
   .setRow input.small{width:80px;}
-  #saveSettingsBtn{
+  #saveSettingsBtn, #aSaveSettingsBtn{
     padding:11px 20px; font-size:16px; font-weight:700; border:0; border-radius:10px;
     background:var(--green); color:#fff; cursor:pointer;
   }
-  #saveSettingsBtn:disabled{opacity:.45;}
-  #settingsMsg{font-size:13px; color:var(--green); display:none;}
+  #saveSettingsBtn:disabled, #aSaveSettingsBtn:disabled{opacity:.45;}
+  #settingsMsg, #aSettingsMsg{font-size:13px; color:var(--green); display:none;}
   .loading{color:var(--dim); font-size:14px; padding:20px 0; text-align:center;}
   .cardTitle{font-size:16px; font-weight:800; color:var(--green-dark); margin:0 0 10px;}
   .shopRow{display:flex; gap:8px;}
@@ -162,6 +162,59 @@
   </div>
 
   <div class="card">
+    <p class="cardTitle">秋菜の食費</p>
+    <div class="periodLabel" id="aPeriodLabel">読み込み中…</div>
+    <div class="remainRow">
+      <div class="remainMain">
+        <span class="label">残り</span>
+        <span class="value" id="aRemainValue">―</span>
+      </div>
+      <div class="perDay">
+        <span class="label">1日あたり</span>
+        <span class="value" id="aPerDayValue">―</span>
+      </div>
+    </div>
+    <p class="subInfo" id="aSubInfo"></p>
+    <div class="barOuter"><div class="barInner" id="aBarInner" style="width:0%"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="modeToggle" role="group" aria-label="秋菜の食費の入力方式">
+      <button type="button" id="aModeSpent" class="active">使った金額</button>
+      <button type="button" id="aModeRemaining">残りの金額</button>
+    </div>
+    <div class="amountRow">
+      <input type="number" inputmode="numeric" id="aAmountInput" placeholder="使った金額" aria-label="秋菜の食費の金額を入力">
+      <button type="button" id="aAddBtn">追加</button>
+    </div>
+    <input type="text" id="aMemoInput" placeholder="メモ（任意）" maxlength="100" aria-label="秋菜の食費のメモ">
+    <p id="aRemainHint"></p>
+    <p id="aFormError"></p>
+  </div>
+
+  <div class="card">
+    <ul class="entries" id="aEntryList"></ul>
+    <p class="emptyNote" id="aEmptyNote" style="display:none;">この期間の記録はまだありません。</p>
+    <p class="loading" id="aListLoading">読み込み中…</p>
+  </div>
+
+  <div class="card">
+    <button type="button" class="settingsToggle" id="aSettingsToggle">秋菜の設定（予算・給料日）</button>
+    <div id="aSettingsBox">
+      <div class="setRow">
+        <label>予算 <input type="number" inputmode="numeric" id="aBudgetInput" min="1"> 円</label>
+      </div>
+      <div class="setRow">
+        <label>給料日 毎月 <input type="number" inputmode="numeric" id="aPaydayInput" class="small" min="1" max="31"> 日</label>
+      </div>
+      <div class="setRow">
+        <button type="button" id="aSaveSettingsBtn">保存</button>
+        <span id="aSettingsMsg">保存しました</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
     <p class="cardTitle">買い物リスト</p>
     <div class="shopRow">
       <input type="text" id="shopInput" placeholder="買うものを入力" maxlength="100" aria-label="買うものを入力">
@@ -172,7 +225,8 @@
     <button type="button" id="clearDoneBtn">買ったものをまとめて削除</button>
   </div>
 
-    <div class="card">
+
+  <div class="card">
     <div class="modeToggle" role="group" aria-label="入力方式">
       <button type="button" id="modeSpent" class="active">使った金額</button>
       <button type="button" id="modeRemaining">残りの金額</button>
@@ -233,12 +287,18 @@
   var settingsRef = rootRef.child("settings");
   var entriesRef = rootRef.child("entries");
   var shoppingRef = rootRef.child("shopping");
+  var akinaRef = rootRef.child("akina");
+  var aSettingsRef = akinaRef.child("settings");
+  var aEntriesRef = akinaRef.child("entries");
 
   var settings = null;
   var entriesMap = {};
   var shoppingMap = {};
   var loaded = false;
   var mode = "spent";
+  var aSettings = null;
+  var aEntriesMap = {};
+  var aMode = "spent";
 
   var $ = function(id){ return document.getElementById(id); };
   var syncStatus = $("syncStatus");
@@ -574,6 +634,200 @@
     });
   });
 
+  // ===== 秋菜の食費（別ノード akina 配下。本体とは独立） =====
+  function aCurrentEntries(period){
+    var list = [];
+    Object.keys(aEntriesMap).forEach(function(key){
+      var e = aEntriesMap[key];
+      if (e && e.date >= period.start && e.date <= period.end) {
+        list.push({ key: key, date: e.date, ts: e.ts || 0, amount: e.amount || 0,
+                    memo: e.memo || "", mode: e.mode || "spent",
+                    target_remaining: (typeof e.target_remaining === "number") ? e.target_remaining : null });
+      }
+    });
+    list.sort(function(a, b){ return (b.ts - a.ts) || (a.key < b.key ? 1 : -1); });
+    return list;
+  }
+
+  function aRender(){
+    if (!aSettings) return;
+    var period = foodPeriod(aSettings.payday);
+    var list = aCurrentEntries(period);
+    var spent = list.reduce(function(sum, e){ return sum + e.amount; }, 0);
+    var remaining = aSettings.budget - spent;
+    var perDay = (remaining > 0 && period.daysLeft > 0) ? Math.floor(remaining / period.daysLeft) : 0;
+
+    $("aPeriodLabel").textContent = mdLabel(period.start) + "〜" + mdLabel(period.end) +
+      "（給料日 毎月" + aSettings.payday + "日）";
+    var rv = $("aRemainValue");
+    rv.textContent = yen(remaining);
+    rv.className = "value" + (remaining < 0 ? " negative" : "");
+    $("aPerDayValue").textContent = yen(perDay);
+    $("aSubInfo").textContent = "使った合計 " + yen(spent) + " ／ 予算 " + yen(aSettings.budget) +
+      " ・ あと" + period.daysLeft + "日";
+    var pct = aSettings.budget > 0 ? (spent / aSettings.budget) * 100 : 0;
+    var bar = $("aBarInner");
+    bar.style.width = Math.min(100, Math.max(0, pct)) + "%";
+    bar.className = "barInner" + (spent > aSettings.budget ? " over" : "");
+
+    $("aListLoading").style.display = "none";
+    $("aEmptyNote").style.display = list.length === 0 ? "block" : "none";
+    var ul = $("aEntryList");
+    ul.innerHTML = "";
+    list.forEach(function(e){
+      var li = document.createElement("li");
+      var dateSpan = document.createElement("span");
+      dateSpan.className = "eDate";
+      dateSpan.textContent = mdLabel(e.date);
+      li.appendChild(dateSpan);
+      var body = document.createElement("span");
+      body.className = "eBody";
+      if (e.mode === "remaining") {
+        var badge = document.createElement("span");
+        badge.className = "eBadge";
+        badge.textContent = "残り入力";
+        body.appendChild(badge);
+        body.appendChild(document.createTextNode("残り " +
+          (e.target_remaining !== null ? yen(e.target_remaining) : "―")));
+        var delta = document.createElement("span");
+        delta.className = "eDelta";
+        delta.textContent = "（使った分 " + (e.amount >= 0 ? "+" : "−") + yen(Math.abs(e.amount)) + "）";
+        body.appendChild(delta);
+        if (e.memo) {
+          var memo = document.createElement("span");
+          memo.className = "eMemo";
+          memo.textContent = e.memo;
+          body.appendChild(memo);
+        }
+      } else {
+        body.textContent = e.memo ? e.memo : "食費";
+      }
+      li.appendChild(body);
+      if (e.mode === "spent") {
+        var amt = document.createElement("span");
+        amt.className = "eAmount";
+        amt.textContent = yen(e.amount);
+        li.appendChild(amt);
+      }
+      var del = document.createElement("button");
+      del.type = "button";
+      del.className = "eDel";
+      del.textContent = "×";
+      del.setAttribute("aria-label", "この記録を削除");
+      del.addEventListener("click", function(){
+        aEntriesRef.child(e.key).remove().catch(function(){
+          aShowError("削除できませんでした。もう一度試してください。");
+        });
+      });
+      li.appendChild(del);
+      ul.appendChild(li);
+    });
+
+    aUpdateHint(spent);
+    aValidateForm(spent);
+  }
+
+  function aShowError(msg){
+    var el = $("aFormError");
+    el.textContent = msg;
+    el.style.display = "block";
+    setTimeout(function(){ el.style.display = "none"; }, 4000);
+  }
+  function aUpdateHint(spent){
+    var hint = $("aRemainHint");
+    if (aMode !== "remaining" || !aSettings) { hint.style.display = "none"; return; }
+    var v = parseInt($("aAmountInput").value, 10);
+    if (isNaN(v) || v < 0) { hint.style.display = "none"; return; }
+    hint.textContent = "残り " + yen(v) + " に合わせます（使った合計は " +
+      yen(aSettings.budget - v) + " になります）。";
+    hint.style.display = "block";
+  }
+  function aFormSpentTotal(){
+    if (!aSettings) return 0;
+    var period = foodPeriod(aSettings.payday);
+    return aCurrentEntries(period).reduce(function(sum, e){ return sum + e.amount; }, 0);
+  }
+  function aInputValid(){
+    var v = parseInt($("aAmountInput").value, 10);
+    if (isNaN(v)) return false;
+    return aMode === "spent" ? v >= 1 : v >= 0;
+  }
+  function aValidateForm(){
+    $("aAddBtn").disabled = !aSettings || !aInputValid();
+  }
+  function aSubmitEntry(){
+    if (!aSettings || !aInputValid()) return;
+    var v = parseInt($("aAmountInput").value, 10);
+    var memo = $("aMemoInput").value.trim().slice(0, 100);
+    var entry;
+    if (aMode === "spent") {
+      entry = { date: jstTodayStr(), ts: Date.now(), amount: v, memo: memo,
+                mode: "spent", target_remaining: null };
+    } else {
+      var spent = aFormSpentTotal();
+      var delta = aSettings.budget - v - spent;
+      entry = { date: jstTodayStr(), ts: Date.now(), amount: delta, memo: memo,
+                mode: "remaining", target_remaining: v };
+    }
+    aEntriesRef.push(entry).then(function(){
+      $("aAmountInput").value = "";
+      $("aMemoInput").value = "";
+      aValidateForm();
+      aUpdateHint(aFormSpentTotal());
+    }).catch(function(){
+      aShowError("記録できませんでした。もう一度試してください。");
+    });
+  }
+  function aSetMode(m){
+    aMode = m;
+    $("aModeSpent").className = m === "spent" ? "active" : "";
+    $("aModeRemaining").className = m === "remaining" ? "active" : "";
+    $("aAmountInput").placeholder = m === "spent" ? "使った金額" : "今の残り金額";
+    aValidateForm();
+    aUpdateHint(aFormSpentTotal());
+  }
+  $("aModeSpent").addEventListener("click", function(){ aSetMode("spent"); });
+  $("aModeRemaining").addEventListener("click", function(){ aSetMode("remaining"); });
+  $("aAmountInput").addEventListener("input", function(){
+    aValidateForm();
+    aUpdateHint(aFormSpentTotal());
+  });
+  $("aAddBtn").addEventListener("click", aSubmitEntry);
+  $("aAmountInput").addEventListener("keydown", function(e){
+    if (e.key === "Enter") { e.preventDefault(); aSubmitEntry(); }
+  });
+  $("aMemoInput").addEventListener("keydown", function(e){
+    if (e.key === "Enter") { e.preventDefault(); aSubmitEntry(); }
+  });
+
+  $("aSettingsToggle").addEventListener("click", function(){
+    if (aSettings) {
+      $("aBudgetInput").value = aSettings.budget;
+      $("aPaydayInput").value = aSettings.payday;
+    }
+    $("aSettingsBox").classList.toggle("open");
+  });
+  function aValidateSettings(){
+    var b = parseInt($("aBudgetInput").value, 10);
+    var p = parseInt($("aPaydayInput").value, 10);
+    $("aSaveSettingsBtn").disabled =
+      isNaN(b) || b < 1 || isNaN(p) || p < 1 || p > 31;
+  }
+  $("aBudgetInput").addEventListener("input", aValidateSettings);
+  $("aPaydayInput").addEventListener("input", aValidateSettings);
+  $("aSaveSettingsBtn").addEventListener("click", function(){
+    var b = parseInt($("aBudgetInput").value, 10);
+    var p = parseInt($("aPaydayInput").value, 10);
+    if (isNaN(b) || b < 1 || isNaN(p) || p < 1 || p > 31) return;
+    aSettingsRef.set({ budget: b, payday: p }).then(function(){
+      var msg = $("aSettingsMsg");
+      msg.style.display = "inline";
+      setTimeout(function(){ msg.style.display = "none"; }, 2500);
+    }).catch(function(){
+      aShowError("設定を保存できませんでした。もう一度試してください。");
+    });
+  });
+
   rootRef.on("value", function(snap){
     var data = snap.val() || {};
     if (!data.settings) {
@@ -587,8 +841,20 @@
     }
     entriesMap = data.entries || {};
     shoppingMap = data.shopping || {};
+    var akinaData = data.akina || {};
+    if (!akinaData.settings) {
+      aSettings = { budget: DEFAULT_SETTINGS.budget, payday: DEFAULT_SETTINGS.payday };
+      aSettingsRef.set(aSettings);
+    } else {
+      aSettings = {
+        budget: (typeof akinaData.settings.budget === "number") ? akinaData.settings.budget : DEFAULT_SETTINGS.budget,
+        payday: (typeof akinaData.settings.payday === "number") ? akinaData.settings.payday : DEFAULT_SETTINGS.payday
+      };
+    }
+    aEntriesMap = akinaData.entries || {};
     loaded = true;
     render();
+    aRender();
   }, function(err){
     syncStatus.textContent = "読み込めませんでした";
     syncStatus.className = "err";
