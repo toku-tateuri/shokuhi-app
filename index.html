@@ -162,6 +162,42 @@
   </div>
 
   <div class="card">
+    <div class="modeToggle" role="group" aria-label="入力方式">
+      <button type="button" id="modeSpent" class="active">使った金額</button>
+      <button type="button" id="modeRemaining">残りの金額</button>
+    </div>
+    <div class="amountRow">
+      <input type="number" inputmode="numeric" id="amountInput" placeholder="使った金額" aria-label="金額を入力">
+      <button type="button" id="addBtn">追加</button>
+    </div>
+    <input type="text" id="memoInput" placeholder="メモ（任意）" maxlength="100" aria-label="メモ">
+    <p id="remainHint"></p>
+    <p id="formError"></p>
+  </div>
+
+  <div class="card">
+    <ul class="entries" id="entryList"></ul>
+    <p class="emptyNote" id="emptyNote" style="display:none;">この期間の記録はまだありません。</p>
+    <p class="loading" id="listLoading">読み込み中…</p>
+  </div>
+
+  <div class="card">
+    <button type="button" class="settingsToggle" id="settingsToggle">設定（予算・給料日）</button>
+    <div id="settingsBox">
+      <div class="setRow">
+        <label>予算 <input type="number" inputmode="numeric" id="budgetInput" min="1"> 円</label>
+      </div>
+      <div class="setRow">
+        <label>給料日 毎月 <input type="number" inputmode="numeric" id="paydayInput" class="small" min="1" max="31"> 日</label>
+      </div>
+      <div class="setRow">
+        <button type="button" id="saveSettingsBtn">保存</button>
+        <span id="settingsMsg">保存しました</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
     <p class="cardTitle">秋菜の食費</p>
     <div class="periodLabel" id="aPeriodLabel">読み込み中…</div>
     <div class="remainRow">
@@ -223,44 +259,6 @@
     <ul class="shopList" id="shopList"></ul>
     <p class="emptyNote" id="shopEmptyNote" style="display:none;">買い物リストは空です。</p>
     <button type="button" id="clearDoneBtn">買ったものをまとめて削除</button>
-  </div>
-
-
-  <div class="card">
-    <div class="modeToggle" role="group" aria-label="入力方式">
-      <button type="button" id="modeSpent" class="active">使った金額</button>
-      <button type="button" id="modeRemaining">残りの金額</button>
-    </div>
-    <div class="amountRow">
-      <input type="number" inputmode="numeric" id="amountInput" placeholder="使った金額" aria-label="金額を入力">
-      <button type="button" id="addBtn">追加</button>
-    </div>
-    <input type="text" id="memoInput" placeholder="メモ（任意）" maxlength="100" aria-label="メモ">
-    <p id="remainHint"></p>
-    <p id="formError"></p>
-  </div>
-
-
-  <div class="card">
-    <ul class="entries" id="entryList"></ul>
-    <p class="emptyNote" id="emptyNote" style="display:none;">この期間の記録はまだありません。</p>
-    <p class="loading" id="listLoading">読み込み中…</p>
-  </div>
-
-  <div class="card">
-    <button type="button" class="settingsToggle" id="settingsToggle">設定（予算・給料日）</button>
-    <div id="settingsBox">
-      <div class="setRow">
-        <label>予算 <input type="number" inputmode="numeric" id="budgetInput" min="1"> 円</label>
-      </div>
-      <div class="setRow">
-        <label>給料日 毎月 <input type="number" inputmode="numeric" id="paydayInput" class="small" min="1" max="31"> 日</label>
-      </div>
-      <div class="setRow">
-        <button type="button" id="saveSettingsBtn">保存</button>
-        <span id="settingsMsg">保存しました</span>
-      </div>
-    </div>
   </div>
 </div>
 
